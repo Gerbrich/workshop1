@@ -1,0 +1,174 @@
+    //in de hoofdcode verwijzing naar methode
+
+    btNieuweKlant.setOnAction(e -> maakNieuweKlant()); 
+
+    //de methode zelf
+    private void processSQLNonSelect(String sqlCommand) {
+        borderPaneExecutionResult.getChildren().remove(tableView);
+        borderPaneExecutionResult.setCenter(taSQLResult);
+
+        try {
+
+            statement = connection.createStatement();
+
+            statement.executeUpdate(sqlCommand);
+
+            taSQLResult.setText("SQL command executed");
+        } catch (SQLException ex) {
+            taSQLResult.setText(ex.toString());
+        }
+    }
+
+    private void maakNieuweKlant() {
+        TextField tfKlantid = new TextField();
+        TextField tfVoornaam = new TextField();
+        TextField tfAchternaam = new TextField();
+        TextField tfTussenvoegsel = new TextField();
+        TextField tfEmail = new TextField();
+        TextField tfStraatnaam = new TextField();
+        TextField tfPostcode = new TextField();
+        TextField tfToevoeging = new TextField();
+        TextField tfHuisnummer = new TextField();
+        TextField tfWoonplaats = new TextField();
+        Button btVoegKlantToe = new Button("Voeg klant toe");
+        
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(5);
+        gridPane.setVgap(5);
+        gridPane.add(new Label("Klant id:"), 0, 0);
+        gridPane.add(tfKlantid, 1, 0);
+
+        gridPane.add(new Label("Voornaam:"), 0, 1);
+        gridPane.add(tfVoornaam, 1, 1);
+        gridPane.add(new Label("Tussenvoegsel:"), 0, 2);
+        gridPane.add(tfTussenvoegsel, 1, 2);
+        gridPane.add(new Label("Achternaam:"), 0, 3);
+        gridPane.add(tfAchternaam, 1, 3);
+
+        gridPane.add(new Label("E-mail:"), 0, 4);
+        gridPane.add(tfEmail, 1, 4);
+        gridPane.add(new Label("Straatnaam:"), 0, 5);
+        gridPane.add(tfStraatnaam, 1, 5);
+        gridPane.add(new Label("Huisnummer:"), 0, 6);
+        gridPane.add(tfHuisnummer, 1, 6);
+        gridPane.add(new Label("Toevoeging:"), 0, 7);
+        gridPane.add(tfToevoeging, 1, 7);
+
+        gridPane.add(new Label("Postcode:"), 0, 8);
+        gridPane.add(tfPostcode, 1, 8);
+        gridPane.add(new Label("Woonplaats:"), 0, 9);
+        gridPane.add(tfWoonplaats, 1, 9);
+        gridPane.add(btVoegKlantToe, 1, 10);
+
+        gridPane.setAlignment(Pos.CENTER);
+        tfKlantid.setAlignment(Pos.BOTTOM_LEFT);
+        tfVoornaam.setAlignment(Pos.BOTTOM_LEFT);
+        tfAchternaam.setAlignment(Pos.BOTTOM_LEFT);
+        tfTussenvoegsel.setAlignment(Pos.BOTTOM_LEFT);
+        tfEmail.setAlignment(Pos.BOTTOM_LEFT);
+        tfStraatnaam.setAlignment(Pos.BOTTOM_LEFT);
+        tfPostcode.setAlignment(Pos.BOTTOM_LEFT);
+        tfToevoeging.setAlignment(Pos.BOTTOM_LEFT);
+        tfHuisnummer.setAlignment(Pos.BOTTOM_LEFT);
+        tfWoonplaats.setAlignment(Pos.BOTTOM_LEFT);
+
+        // Process Maak nieuwe klant
+        btVoegKlantToe.setOnAction(e -> {
+
+            boolean goedIngevuld = true;
+
+            String klantid = tfKlantid.getText();
+            if (klantid.matches(".*\\D.*")) {
+                tfKlantid.setStyle("-fx-text-inner-color:red;");
+                goedIngevuld = false;
+
+            }
+
+            String voornaam = tfVoornaam.getText();
+            if (voornaam.matches(".*\\d.*")) {
+                tfVoornaam.setStyle("-fx-text-inner-color:red;");
+                goedIngevuld = false;
+
+            }
+
+            String achternaam = tfAchternaam.getText();
+            if (achternaam.matches(".*\\d.*")) {
+                tfAchternaam.setStyle("-fx-text-inner-color:red;");
+                goedIngevuld = false;
+            }
+
+            String tussenvoegsel = tfTussenvoegsel.getText();
+            if (tussenvoegsel.matches(".*\\d.*")) {
+                tfTussenvoegsel.setStyle("-fx-text-inner-color:red;");
+                goedIngevuld = false;
+            }
+            String email = tfEmail.getText();
+
+            String straatnaam = tfStraatnaam.getText();
+            if (straatnaam.matches(".*\\d.*")) {
+                tfStraatnaam.setStyle("-fx-text-inner-color:red;");
+                goedIngevuld = false;
+            }
+            String postcode = tfPostcode.getText();
+
+            String toevoeging = tfTussenvoegsel.getText();
+
+            String huisnummer = tfHuisnummer.getText();
+            if (huisnummer.matches(".*\\D.*")) {
+                tfHuisnummer.setStyle("-fx-text-inner-color:red;");
+                goedIngevuld = false;
+            }
+            String woonplaats = tfWoonplaats.getText();
+            if (woonplaats.matches(".*\\d.*")) {
+                tfWoonplaats.setStyle("-fx-text-inner-color:red;");
+                goedIngevuld = false;
+            }
+
+            if (goedIngevuld) {
+                try {
+                    String SQL = "INSERT INTO KLANT(klant_id,voornaam,tussenvoegsel,"
+                            + "achternaam,email,straatnaam,huisnummer,toevoeging,postcode,"
+                            + "woonplaats) VALUES(?,?,?,?,?,?,?,?,?,?)";
+
+
+                    PreparedStatement pstmt = connection.prepareStatement(SQL);
+
+                    connection.setAutoCommit(false);
+
+                    pstmt.setString(1, klantid);
+                    pstmt.setString(2, voornaam);
+                    pstmt.setString(3, tussenvoegsel);
+                    pstmt.setString(4, achternaam);
+                    pstmt.setString(5, email);
+                    pstmt.setString(6, straatnaam);
+                    pstmt.setString(7, huisnummer);
+                    pstmt.setString(8, toevoeging);
+                    pstmt.setString(9, postcode);
+                    pstmt.setString(10, woonplaats);
+
+                    pstmt.addBatch();
+
+                    //Create an int[] to hold returned values
+                    int[] count = pstmt.executeBatch();
+
+                    connection.commit();
+                    System.out.println("Nieuwe klant gemaakt");
+
+                } catch (SQLException ex) {
+                    System.out.printf(ex.getMessage());
+                }
+            } else {
+                System.out.printf("Sommige gegevens zijn niet goed ingevuld");
+            }
+
+        });
+
+        Scene scene = new Scene(gridPane, 400, 400);
+        Stage stMaakNieuweKlant = new Stage();
+        stMaakNieuweKlant.setTitle("Voeg klant toe");
+        stMaakNieuweKlant.setScene(scene);
+        stMaakNieuweKlant.show();
+    }
+
+
