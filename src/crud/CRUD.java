@@ -29,7 +29,7 @@ import org.apache.commons.validator.EmailValidator;
 public class CRUD extends Application {
 
     private TableView tableView = new TableView();
-    Connection connection;
+    private Connection connection;
     private Statement statement;
     private TextArea taSQLResult = new TextArea();
     private TextArea tasqlCommand = new TextArea();
