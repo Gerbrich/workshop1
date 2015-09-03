@@ -23,13 +23,28 @@ CREATE TABLE IF NOT EXISTS `mydb`.`KLANT` (
   `tussenvoegsel` VARCHAR(20) NULL COMMENT '',
   `achternaam` VARCHAR(51) NULL COMMENT '',
   `email` VARCHAR(320) NULL COMMENT '',
+  PRIMARY KEY (`klant_id`)  COMMENT '',
+  UNIQUE INDEX `klant_id_UNIQUE` (`klant_id` ASC)  COMMENT '')
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`ADRES`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`ADRES` (
+  `klant_id` INT UNSIGNED NOT NULL COMMENT '',
   `straatnaam` VARCHAR(26) NULL COMMENT '',
   `huisnummer` INT NULL COMMENT '',
   `toevoeging` VARCHAR(6) NULL COMMENT '',
   `postcode` VARCHAR(6) NULL COMMENT '',
   `woonplaats` VARCHAR(26) NULL COMMENT '',
   PRIMARY KEY (`klant_id`)  COMMENT '',
-  UNIQUE INDEX `klant_id_UNIQUE` (`klant_id` ASC)  COMMENT '')
+  UNIQUE INDEX `klant_id_UNIQUE` (`klant_id` ASC)  COMMENT '',
+  INDEX `klant_id_idx` (`klant_id` ASC)  COMMENT '',
+  CONSTRAINT `klant_id`
+    FOREIGN KEY (`klant_id`)
+    REFERENCES `mydb`.`KLANT` (`klant_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
